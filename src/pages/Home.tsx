@@ -12,6 +12,12 @@ export const Home = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
 
+  React.useEffect(() => {
+    const handleOpenModal = () => setIsWaitlistModalOpen(true);
+    window.addEventListener('openWaitlistModal', handleOpenModal);
+    return () => window.removeEventListener('openWaitlistModal', handleOpenModal);
+  }, []);
+
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
   };
@@ -50,630 +56,83 @@ export const Home = () => {
   return (
     <>
       {/* Hero */}
-      <section id="hero" className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-900">
-        {/* Background Elements */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-[1200px] pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#D4FF3E]/5 rounded-full blur-[100px]"></div>
-          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#D4FF3E]/10 rounded-full blur-[120px]"></div>
-          {/* Faint crosshairs/grid lines from screenshot */}
-          <div className="absolute top-32 left-32 w-8 h-8 border-l border-t border-slate-700"></div>
-          <div className="absolute top-32 right-32 w-8 h-8 border-r border-t border-slate-700"></div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="max-w-4xl mx-auto flex flex-col items-center">
-            
-            {/* Top Badge */}
-            <div className="inline-flex items-center gap-3 p-1 pr-4 rounded-full bg-white/5 border border-slate-700 text-white text-sm font-medium mb-8 backdrop-blur-md hover:bg-white/10 transition-colors cursor-pointer">
-              <span className="px-3 py-1 rounded-full bg-white text-black text-xs font-bold">New</span>
-              <span>No Hidden Pricing <ArrowRight size={14} className="inline ml-1" /></span>
-            </div>
-
-            {/* Headline */}
-            <h1 className="font-display text-5xl md:text-7xl lg:text-[80px] font-bold leading-[1.05] text-white mb-6 tracking-tight">
-              Redefining Business <br className="hidden md:block" />
-              Advisory for Small Businesses
-            </h1>
-
-            {/* Subheadline */}
-            <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Delivering cost-effective, process-driven solutions that create real impact.
-            </p>
-
-            {/* Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
-              <button onClick={() => setIsWaitlistModalOpen(true)} className="w-full sm:w-auto bg-[#D4FF3E] text-slate-950 px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-[#bce62d] transition-colors">
-                Join Our Waitlist <ArrowRight size={20} />
-              </button>
-              <a href="#services" onClick={(e) => scrollToSection(e, '#services')} className="w-full sm:w-auto bg-slate-800 border border-slate-700 text-white px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-slate-700 transition-colors">
-                <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center">
-                  <div className="w-0 h-0 border-t-[4px] border-t-transparent border-l-[6px] border-l-slate-900 border-b-[4px] border-b-transparent ml-0.5"></div>
-                </div>
-                Watch Demo
-              </a>
-            </div>
-          </motion.div>
-          
-          {/* Bottom Visuals Grid */}
-          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="w-full max-w-[1100px] mx-auto hidden lg:flex items-end justify-center gap-4 h-[360px]">
-            
-            {/* Card 1: Image */}
-            <div className="relative w-[26%] h-full rounded-[2rem] overflow-hidden group bg-slate-800">
-              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" alt="Abstract Tech" className="w-full h-full object-cover grayscale opacity-80 group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
-              <div className="absolute top-6 -right-2 bg-white rounded-full px-4 py-2 flex items-center gap-2 shadow-lg z-10 transform -translate-x-4">
-                <div className="w-2 h-2 bg-slate-900 rounded-sm"></div>
-                <span className="text-slate-900 text-sm font-bold whitespace-nowrap">Advisory Platform</span>
-              </div>
-            </div>
-
-            {/* Card 2: 200+ */}
-            <div className="w-[17%] h-[75%] bg-white rounded-[2rem] p-6 flex flex-col justify-center items-center text-center shadow-xl">
-              <h3 className="text-4xl xl:text-5xl font-bold text-slate-900 mb-3">200+</h3>
-              <p className="text-slate-500 font-medium text-sm leading-snug">
-                Our Esteemed<br />Clients and Partners
-              </p>
-            </div>
-
-            {/* Card 3: Lock */}
-            <div className="w-[16%] h-[75%] bg-slate-800 rounded-[2rem] p-6 relative overflow-hidden border border-slate-700 shadow-xl">
-              <h4 className="text-white font-bold text-lg leading-tight relative z-10">Trusted &<br />Transparent<br />Growth</h4>
-              <div className="absolute -bottom-8 -right-8 text-slate-900 opacity-80">
-                <Shield size={140} strokeWidth={1.5} fill="currentColor" />
-              </div>
-            </div>
-
-            {/* Card 4: Chart */}
-            <div className="w-[16%] h-[75%] bg-slate-800 rounded-[2rem] p-6 relative overflow-hidden border border-slate-700 shadow-xl flex flex-col justify-between">
-              <h4 className="text-white font-bold text-lg leading-tight relative z-10">Trusted &<br />Transparent<br />Growth</h4>
-              <div className="flex items-end gap-2 h-20 mt-4 relative z-10">
-                <div className="flex-1 bg-white/10 rounded-t-md h-[40%]"></div>
-                <div className="flex-1 bg-white/10 rounded-t-md h-[30%]"></div>
-                <div className="flex-1 bg-[#D4FF3E] rounded-t-md h-[90%] shadow-[0_0_15px_rgba(212,255,62,0.3)]"></div>
-                <div className="flex-1 bg-white/10 rounded-t-md h-[60%]"></div>
-              </div>
-            </div>
-
-            {/* Card 5: Global */}
-            <div className="w-[25%] h-full bg-white rounded-[2rem] p-8 relative overflow-hidden flex flex-col shadow-xl">
-              <h3 className="text-4xl xl:text-5xl font-bold text-slate-900 mb-2">20+</h3>
-              <p className="text-slate-500 font-medium text-sm mb-6">Industry Partners driving innovation</p>
-              <div className="flex flex-wrap gap-2 mb-auto relative z-10">
-                <span className="bg-slate-900 text-[#D4FF3E] text-xs font-bold px-3 py-1.5 rounded-full">Mexico</span>
-                <span className="bg-slate-900 text-[#D4FF3E] text-xs font-bold px-3 py-1.5 rounded-full">Australia</span>
-              </div>
-              <div className="absolute -bottom-16 -right-16 w-64 h-64 bg-slate-100 rounded-full opacity-50"></div>
-              <Globe size={200} className="absolute -bottom-12 -right-12 text-slate-100" strokeWidth={1} />
-            </div>
-
-          </motion.div>
-
-          {/* Mobile version of the grid */}
-          <div className="mt-12 flex flex-col gap-4 lg:hidden">
-             <div className="w-full h-[250px] rounded-[2rem] overflow-hidden group bg-slate-800 relative">
-              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" alt="Abstract Tech" className="w-full h-full object-cover grayscale opacity-80" referrerPolicy="no-referrer" />
-              <div className="absolute top-4 right-4 bg-white rounded-full px-4 py-2 flex items-center gap-2 shadow-lg">
-                <div className="w-2 h-2 bg-slate-900 rounded-sm"></div>
-                <span className="text-slate-900 text-sm font-bold">Advisory Platform</span>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-[2rem] p-6 flex flex-col justify-center items-center text-center shadow-xl">
-                <h3 className="text-4xl font-bold text-slate-900 mb-2">200+</h3>
-                <p className="text-slate-500 font-medium text-xs">Our Esteemed Clients</p>
-              </div>
-              <div className="bg-slate-800 rounded-[2rem] p-6 relative overflow-hidden border border-slate-700 shadow-xl flex flex-col justify-between">
-                <h4 className="text-white font-bold text-sm relative z-10">Trusted Growth</h4>
-                <div className="flex items-end gap-1 h-12 mt-4 relative z-10">
-                  <div className="flex-1 bg-white/10 rounded-t-sm h-[40%]"></div>
-                  <div className="flex-1 bg-[#D4FF3E] rounded-t-sm h-[90%]"></div>
-                  <div className="flex-1 bg-white/10 rounded-t-sm h-[60%]"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* Who We Are Section */}
-      <section id="who-we-are" className="py-24 lg:py-32 bg-slate-900 relative overflow-hidden">
-        {/* Subtle background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-[1200px] pointer-events-none">
-          <motion.div 
-            animate={{ 
-              y: [0, -20, 0],
-              opacity: [0.5, 0.8, 0.5]
-            }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#D4FF3E]/5 rounded-full blur-[120px]"
-          ></motion.div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 mb-20">
-            <div className="w-full lg:w-1/3 sticky top-24 self-start">
-              <h2 className="font-display text-5xl md:text-7xl font-bold text-white tracking-tight leading-[1.1]">Who We Are</h2>
-            </div>
-            <div className="w-full lg:w-2/3">
-              <p className="text-xl md:text-2xl text-slate-400 leading-relaxed font-medium">
-                As your dedicated Remote Business Partner, we are revolutionising business advisory and consulting for small to medium enterprises. By combining expert strategic guidance with cost-effective, process-driven operational frameworks, we empower you to scale efficiently. Say goodbye to the bloat of traditional consulting and hello to actionable insights, streamlined workflows, and real, measurable growth.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
-            {/* Image 1 */}
-            <motion.div 
-              whileHover={{ y: -10 }}
-              className="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-slate-800 border border-slate-700"
-            >
-              <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" alt="Data visualization" className="w-full h-full object-cover grayscale opacity-80" referrerPolicy="no-referrer" />
-            </motion.div>
-            {/* Image 2 */}
-            <motion.div 
-              whileHover={{ y: -10 }}
-              className="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-slate-800 border border-slate-700"
-            >
-              <img src="https://images.unsplash.com/photo-1614028674026-a65e31bfd27c?q=80&w=2070&auto=format&fit=crop" alt="Abstract geometry" className="w-full h-full object-cover grayscale opacity-80" referrerPolicy="no-referrer" />
-            </motion.div>
-            {/* Image 3 */}
-            <motion.div 
-              whileHover={{ y: -10 }}
-              className="w-full aspect-[4/3] rounded-3xl overflow-hidden bg-slate-800 border border-slate-700"
-            >
-              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop" alt="Team collaboration" className="w-full h-full object-cover grayscale opacity-80" referrerPolicy="no-referrer" />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Platform Overview Section */}
-      <section className="py-24 bg-slate-900 overflow-hidden relative">
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="mb-20 text-center flex flex-col items-center">
-            <h2 className="font-display text-5xl md:text-7xl font-bold text-white max-w-3xl leading-[0.95] tracking-tighter">
-              Inside the<br />Growth Platform
-            </h2>
-            <p className="text-slate-400 mt-6 max-w-2xl text-lg">
-              A comprehensive digital workspace built specifically for small businesses. Access the tools, resources, and strategic support you need 24/7.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-800 rounded-3xl p-8 md:p-10 flex flex-col items-center text-center min-h-[340px] border border-slate-700 hover:border-slate-600 transition-colors">
-              <div className="text-[#D4FF3E] mb-8">
-                <FileText size={32} strokeWidth={1.2} />
-              </div>
-              <h3 className="text-3xl font-bold text-white mb-auto leading-tight tracking-tight">
-                DocuShare<br />Portal
-              </h3>
-              <p className="text-slate-400 mt-12 leading-relaxed text-sm md:text-base">
-                Instantly access over 500+ premium templates, industry-specific toolkits, and complete documentation suites.
-              </p>
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-800 rounded-3xl p-8 md:p-10 flex flex-col items-center text-center min-h-[340px] border border-slate-700 hover:border-slate-600 transition-colors">
-              <div className="text-[#D4FF3E] mb-8">
-                <Gift size={32} strokeWidth={1.2} />
-              </div>
-              <h3 className="text-3xl font-bold text-white mb-auto leading-tight tracking-tight">
-                Partner<br />Network
-              </h3>
-              <p className="text-slate-400 mt-12 leading-relaxed text-sm md:text-base">
-                Unlock exclusive discounts and special offers on insurance, financing, software, and everyday business tools.
-              </p>
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-800 rounded-3xl p-8 md:p-10 flex flex-col items-center text-center min-h-[340px] border border-slate-700 hover:border-slate-600 transition-colors">
-              <div className="text-[#D4FF3E] mb-8">
-                <Globe size={32} strokeWidth={1.2} />
-              </div>
-              <h3 className="text-3xl font-bold text-white mb-auto leading-tight tracking-tight">
-                Strategic<br />Dashboard
-              </h3>
-              <p className="text-slate-400 mt-12 leading-relaxed text-sm md:text-base">
-                Track your business growth, manage ongoing tasks, and view real-time operational insights all in one place.
-              </p>
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-800 rounded-3xl p-8 md:p-10 flex flex-col items-center text-center min-h-[340px] border border-slate-700 hover:border-slate-600 transition-colors">
-              <div className="text-[#D4FF3E] mb-8">
-                <Briefcase size={32} strokeWidth={1.2} />
-              </div>
-              <h3 className="text-3xl font-bold text-white mb-auto leading-tight tracking-tight">
-                Automated<br />Workflows
-              </h3>
-              <p className="text-slate-400 mt-12 leading-relaxed text-sm md:text-base">
-                Streamline your daily operations with plug-and-play frameworks and automated processes tailored for efficiency.
-              </p>
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-800 rounded-3xl p-8 md:p-10 flex flex-col items-center text-center min-h-[340px] border border-slate-700 hover:border-slate-600 transition-colors">
-              <div className="text-[#D4FF3E] mb-8">
-                <Zap size={32} strokeWidth={1.2} />
-              </div>
-              <h3 className="text-3xl font-bold text-white mb-auto leading-tight tracking-tight">
-                AI Advisory<br />Tools
-              </h3>
-              <p className="text-slate-400 mt-12 leading-relaxed text-sm md:text-base">
-                Leverage cutting-edge AI integrations to analyse data, generate reports, and future-proof your business operations.
-              </p>
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-800 rounded-3xl p-8 md:p-10 flex flex-col items-center text-center min-h-[340px] border border-slate-700 hover:border-slate-600 transition-colors">
-              <div className="text-[#D4FF3E] mb-8">
-                <Users size={32} strokeWidth={1.2} />
-              </div>
-              <h3 className="text-3xl font-bold text-white mb-auto leading-tight tracking-tight">
-                Direct<br />Communication
-              </h3>
-              <p className="text-slate-400 mt-12 leading-relaxed text-sm md:text-base">
-                Connect seamlessly with your dedicated Remote Business Partner anytime, anywhere through secure channels.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-
-      {/* DocuShare */}
-      <section id="docushare" className="py-24 bg-slate-900 overflow-hidden">
+      <section id="hero" className="pt-32 pb-12 lg:pt-40 lg:pb-24 bg-slate-900 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-8">
-            <h2 className="font-display text-5xl md:text-7xl font-bold text-white max-w-xl leading-[1.1] tracking-tight">
-              Introducing<br />DocuShare
-            </h2>
-            <p className="text-lg text-slate-400 max-w-md leading-relaxed">
-              An on-demand document generation service. Get the documents you need, whenever you want. Over 500 templates, industry-specific Toolkits, and comprehensive Documentation Suites.
-            </p>
-          </div>
-          
-          <div className="grid lg:grid-cols-2 gap-6">
-            {/* Image */}
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              className="rounded-[2rem] overflow-hidden h-full min-h-[400px] relative border border-slate-700"
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" 
-                alt="Data and documents" 
-                className="absolute inset-0 w-full h-full object-cover grayscale opacity-80"
-                referrerPolicy="no-referrer"
-              />
-            </motion.div>
+          <div className="bg-slate-800 border border-slate-700 rounded-[3rem] pt-16 px-6 md:pt-24 md:px-16 lg:pt-32 lg:px-20 relative overflow-hidden flex flex-col items-center text-center shadow-2xl">
             
-            {/* Cards Grid */}
-            <div className="grid sm:grid-cols-2 gap-6">
-              {/* Card 1 - Lime */}
-              <motion.div whileHover={{ y: -5 }} className="bg-[#D4FF3E] rounded-[2rem] p-8 flex flex-col">
-                <div className="text-slate-950 mb-12">
-                  <FileText size={28} strokeWidth={1.5} />
-                </div>
-                <h3 className="text-xl font-bold text-slate-950 mb-3">500+ Templates</h3>
-                <p className="text-slate-800 leading-relaxed text-sm">
-                  A massive library of ready-to-use documents covering every aspect of business operations.
-                </p>
-              </motion.div>
-              
-              {/* Card 2 - Dark */}
-              <motion.div whileHover={{ y: -5 }} className="bg-slate-800 rounded-[2rem] p-8 flex flex-col border border-slate-700">
-                <div className="text-white mb-12">
-                  <Briefcase size={28} strokeWidth={1.5} />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">Industry Toolkits</h3>
-                <p className="text-slate-400 leading-relaxed text-sm">
-                  Tailored toolkits designed for specific industries or operational needs.
-                </p>
-              </motion.div>
-              
-              {/* Card 3 - Dark */}
-              <motion.div whileHover={{ y: -5 }} className="bg-slate-800 rounded-[2rem] p-8 flex flex-col border border-slate-700">
-                <div className="text-white mb-12">
-                  <Shield size={28} strokeWidth={1.5} />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">Documentation Suites</h3>
-                <p className="text-slate-400 leading-relaxed text-sm">
-                  Comprehensive suites to ensure you have all your bases covered securely.
-                </p>
-              </motion.div>
-              
-              {/* Card 4 - Lime */}
-              <motion.div whileHover={{ y: -5 }} className="bg-[#D4FF3E] rounded-[2rem] p-8 flex flex-col">
-                <div className="text-slate-950 mb-12">
-                  <Zap size={28} strokeWidth={1.5} />
-                </div>
-                <h3 className="text-xl font-bold text-slate-950 mb-3">Customisation</h3>
-                <p className="text-slate-800 leading-relaxed text-sm">
-                  Bespoke customisation services to tailor documents precisely to your clients' needs.
-                </p>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Web Application */}
-      <section id="web-application" className="py-24 bg-slate-900 overflow-hidden border-t border-slate-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-8">
-            <h2 className="font-display text-5xl md:text-7xl font-bold text-white max-w-xl leading-[1.1] tracking-tight">
-              The Web<br />Application
-            </h2>
-            <p className="text-lg text-slate-400 max-w-md leading-relaxed">
-              A powerful, centralised hub for your business. Manage tasks, access resources, and collaborate with your Remote Business Partner seamlessly from any device.
-            </p>
-          </div>
-          
-          <div className="grid lg:grid-cols-2 gap-6">
-            {/* Cards Grid */}
-            <div className="grid sm:grid-cols-2 gap-6 order-2 lg:order-1">
-              {/* Card 1 - Lime */}
-              <motion.div whileHover={{ y: -5 }} className="bg-[#D4FF3E] rounded-[2rem] p-8 flex flex-col">
-                <div className="text-slate-950 mb-12">
-                  <BarChart3 size={28} strokeWidth={1.5} />
-                </div>
-                <h3 className="text-xl font-bold text-slate-950 mb-3">Central Dashboard</h3>
-                <p className="text-slate-800 leading-relaxed text-sm">
-                  Get a bird's-eye view of your business operations, key metrics, and ongoing projects in real-time.
-                </p>
-              </motion.div>
-              
-              {/* Card 2 - Dark */}
-              <motion.div whileHover={{ y: -5 }} className="bg-slate-800 rounded-[2rem] p-8 flex flex-col border border-slate-700">
-                <div className="text-white mb-12">
-                  <CheckCircle size={28} strokeWidth={1.5} />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">Task Management</h3>
-                <p className="text-slate-400 leading-relaxed text-sm">
-                  Track progress, assign responsibilities, and hit your milestones with our intuitive task tracking system.
-                </p>
-              </motion.div>
-              
-              {/* Card 3 - Dark */}
-              <motion.div whileHover={{ y: -5 }} className="bg-slate-800 rounded-[2rem] p-8 flex flex-col border border-slate-700">
-                <div className="text-white mb-12">
-                  <Lightbulb size={28} strokeWidth={1.5} />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">AI Integration</h3>
-                <p className="text-slate-400 leading-relaxed text-sm">
-                  Leverage smart insights and automated workflows to reduce manual work and scale efficiently.
-                </p>
-              </motion.div>
-              
-              {/* Card 4 - Lime */}
-              <motion.div whileHover={{ y: -5 }} className="bg-[#D4FF3E] rounded-[2rem] p-8 flex flex-col">
-                <div className="text-slate-950 mb-12">
-                  <Shield size={28} strokeWidth={1.5} />
-                </div>
-                <h3 className="text-xl font-bold text-slate-950 mb-3">Secure Portal</h3>
-                <p className="text-slate-800 leading-relaxed text-sm">
-                  Safely communicate with your partner and store sensitive business documents with enterprise-grade security.
-                </p>
-              </motion.div>
+            {/* Background Glows */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-[1200px] pointer-events-none z-0">
+              <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#D4FF3E]/10 rounded-full blur-[100px]"></div>
+              <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#D4FF3E]/5 rounded-full blur-[120px]"></div>
             </div>
 
-            {/* Image */}
             <motion.div 
-              whileHover={{ scale: 1.02 }}
-              className="rounded-[2rem] overflow-hidden h-full min-h-[400px] relative border border-slate-700 order-1 lg:order-2"
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.6 }} 
+              className="relative z-20 max-w-4xl mx-auto flex flex-col items-center"
             >
-              <img 
-                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop" 
-                alt="Web Application Dashboard" 
-                className="absolute inset-0 w-full h-full object-cover grayscale opacity-80"
-                referrerPolicy="no-referrer"
-              />
-            </motion.div>
-          </div>
-        </div>
-      </section>
+              {/* Top Badge */}
+              <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-[#D4FF3E]/10 text-[#D4FF3E] text-sm font-semibold mb-8 border border-[#D4FF3E]/20 cursor-pointer hover:bg-[#D4FF3E]/20 transition-colors">
+                <span className="px-2 py-0.5 rounded-full bg-[#D4FF3E] text-slate-900 text-xs font-bold mr-2">Coming Soon</span>
+                New Platform <ArrowRight size={14} className="inline ml-1" />
+              </div>
 
-      {/* Partner Offers */}
-      <section id="offers" className="py-24 bg-slate-900 text-white relative overflow-hidden">
-        {/* Subtle background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-[1200px] pointer-events-none">
-          <motion.div 
-            animate={{ 
-              scale: [1, 1.1, 1],
-              opacity: [0.3, 0.5, 0.3]
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-[#D4FF3E]/5 rounded-full blur-[120px]"
-          ></motion.div>
-        </div>
+              {/* Headline */}
+              <h1 className="font-display text-5xl md:text-7xl lg:text-[80px] font-bold leading-[1.05] text-white mb-6 tracking-tight">
+                Redefining Business <br className="hidden md:block" />
+                Advisory for Small Businesses
+              </h1>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
-            <div className="sticky top-24 self-start">
-              <h2 className="font-display text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight max-w-2xl text-white">
-                Exclusive Partner<br />Offers
-              </h2>
-            </div>
-            <div className="max-w-md flex flex-col items-start md:pt-4">
-              <p className="text-slate-400 text-lg mb-8 leading-relaxed">
-                Access a range of different service providers aimed to provide discounts or special offers on anything from Insurance and Financing to everyday business needs.
+              {/* Subheadline */}
+              <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
+                Delivering cost-effective, process-driven solutions that create real impact.
               </p>
-              <button onClick={() => setIsWaitlistModalOpen(true)} className="inline-flex items-center gap-2 bg-[#D4FF3E] text-slate-950 px-6 py-3 rounded-full font-bold hover:bg-[#bce62d] transition-colors">
-                Join Our Waitlist <ArrowRight size={20} />
-              </button>
-            </div>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Card 1 - Lime */}
-            <motion.div whileHover={{ y: -10 }} className="bg-[#D4FF3E] rounded-[2rem] p-10 flex flex-col min-h-[480px] relative group">
-              <div className="text-slate-950 mb-auto">
-                <Gift size={48} strokeWidth={1.5} />
-              </div>
-              <div className="mt-8">
-                <h3 className="text-3xl font-bold text-slate-950 mb-4 tracking-tight">Insurance & Financing</h3>
-                <p className="text-slate-800 leading-relaxed text-lg">
-                  Discounts on essential business insurance and financing options.
-                </p>
+
+              {/* Buttons */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 w-full sm:w-auto">
               </div>
             </motion.div>
 
-            {/* Card 2 - Image */}
-            <motion.div whileHover={{ y: -10 }} className="rounded-[2rem] p-10 flex flex-col min-h-[480px] relative overflow-hidden group">
-              <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" alt="Abstract data" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale opacity-80" referrerPolicy="no-referrer" />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-slate-900/20"></div>
-              <div className="text-white mb-auto relative z-10">
-                <Headset size={48} strokeWidth={1.5} />
-              </div>
-              <div className="mt-8 relative z-10">
-                <h3 className="text-3xl font-bold text-white mb-4 tracking-tight">Everyday Business Needs</h3>
-                <p className="text-slate-300 leading-relaxed text-lg">
-                  Special offers on software, office supplies, and everyday operational tools.
-                </p>
+            {/* Bottom Visual */}
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.8, delay: 0.2 }} 
+              className="relative z-10 w-full max-w-5xl mx-auto mt-4"
+            >
+              <div className="relative rounded-t-[2rem] border-t-[8px] border-x-[8px] border-slate-900 bg-slate-900 overflow-hidden shadow-2xl aspect-[16/9] md:aspect-[21/9]">
+                <img 
+                  src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" 
+                  alt="Abstract Tech" 
+                  className="w-full h-full object-cover grayscale opacity-60 hover:opacity-80 transition-opacity duration-700"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+                
+                {/* Floating Stats */}
+                <div className="absolute bottom-6 left-6 md:bottom-10 md:left-10 bg-slate-800/90 backdrop-blur-md border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl flex items-center gap-4">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#D4FF3E]/20 flex items-center justify-center flex-shrink-0">
+                    <Users size={20} className="text-[#D4FF3E] md:w-6 md:h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl md:text-2xl font-bold text-white">200+</h3>
+                    <p className="text-slate-400 text-xs md:text-sm font-medium">Esteemed Clients</p>
+                  </div>
+                </div>
+
+                <div className="absolute top-6 right-6 md:top-10 md:right-10 bg-slate-800/90 backdrop-blur-md border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl flex items-center gap-4">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#D4FF3E]/20 flex items-center justify-center flex-shrink-0">
+                    <Globe size={20} className="text-[#D4FF3E] md:w-6 md:h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl md:text-2xl font-bold text-white">20+</h3>
+                    <p className="text-slate-400 text-xs md:text-sm font-medium">Industry Partners</p>
+                  </div>
+                </div>
               </div>
             </motion.div>
 
-            {/* Card 3 - Dark */}
-            <motion.div whileHover={{ y: -10 }} className="bg-slate-800 rounded-[2rem] p-10 flex flex-col min-h-[480px] relative group border border-slate-700">
-              <div className="text-white mb-auto">
-                <Calendar size={48} strokeWidth={1.5} />
-              </div>
-              <div className="mt-8">
-                <h3 className="text-3xl font-bold text-white mb-4 tracking-tight">Professional Services</h3>
-                <p className="text-slate-400 leading-relaxed text-lg">
-                  Reduced rates on legal, accounting, and specialized consulting services.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Card 4 - Dark */}
-            <motion.div whileHover={{ y: -10 }} className="bg-slate-800 rounded-[2rem] p-10 flex flex-col min-h-[480px] relative group border border-slate-700">
-              <div className="text-white mb-auto">
-                <Network size={48} strokeWidth={1.5} />
-              </div>
-              <div className="mt-8">
-                <h3 className="text-3xl font-bold text-white mb-4 tracking-tight">Marketing & Sales</h3>
-                <p className="text-slate-400 leading-relaxed text-lg">
-                  Exclusive deals on marketing platforms, CRM tools, and lead generation services.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Card 5 - Lime */}
-            <motion.div whileHover={{ y: -10 }} className="bg-[#D4FF3E] rounded-[2rem] p-10 flex flex-col min-h-[480px] relative group">
-              <div className="text-slate-950 mb-auto">
-                <FileText size={48} strokeWidth={1.5} />
-              </div>
-              <div className="mt-8">
-                <h3 className="text-3xl font-bold text-slate-950 mb-4 tracking-tight">Technology & Hardware</h3>
-                <p className="text-slate-800 leading-relaxed text-lg">
-                  Discounts on laptops, servers, and IT infrastructure setup.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Card 6 - Image */}
-            <motion.div whileHover={{ y: -10 }} className="rounded-[2rem] p-10 flex flex-col min-h-[480px] relative overflow-hidden group">
-              <img src="https://images.unsplash.com/photo-1614028674026-a65e31bfd27c?q=80&w=2070&auto=format&fit=crop" alt="Abstract geometry" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale opacity-80" referrerPolicy="no-referrer" />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-slate-900/20"></div>
-              <div className="text-white mb-auto relative z-10">
-                <Rocket size={48} strokeWidth={1.5} />
-              </div>
-              <div className="mt-8 relative z-10">
-                <h3 className="text-3xl font-bold text-white mb-4 tracking-tight">Travel & Accommodations</h3>
-                <p className="text-slate-300 leading-relaxed text-lg">
-                  Corporate rates for business travel, hotels, and co-working spaces globally.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Services */}
-      <section id="services" className="py-24 bg-slate-900 relative overflow-hidden">
-        {/* Subtle background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-[1200px] pointer-events-none">
-          <motion.div 
-            animate={{ 
-              x: [0, 20, 0],
-              opacity: [0.3, 0.6, 0.3]
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#D4FF3E]/5 rounded-full blur-[120px]"
-          ></motion.div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-[#D4FF3E]/10 text-[#D4FF3E] text-sm font-semibold mb-6 border border-[#D4FF3E]/20">
-              Core Services
-            </div>
-            <h2 className="font-display text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight">
-              Here are Some of Our Core Services
-            </h2>
-            <p className="text-slate-400 text-lg md:text-xl">
-              Standout consulting services designed to put you in control of your business. From strategic planning to seamless operations.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
-            {/* Top Row: 3 Cards */}
-            <motion.div whileHover={{ scale: 1.02 }} className="col-span-1 md:col-span-2 bg-slate-800 rounded-[2rem] p-10 border border-slate-700 hover:bg-slate-700 transition-colors">
-              <div className="w-14 h-14 rounded-2xl bg-[#D4FF3E]/10 border border-[#D4FF3E]/20 flex items-center justify-center mb-8 text-[#D4FF3E] shadow-[0_0_15px_rgba(212,255,62,0.1)]">
-                <Target size={28} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Operations</h3>
-              <p className="text-slate-400 leading-relaxed text-lg">
-                Streamlining workflows and eliminating bottlenecks to maximise efficiency and reduce unnecessary overhead.
-              </p>
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02 }} className="col-span-1 md:col-span-2 bg-slate-800 rounded-[2rem] p-10 border border-slate-700 hover:bg-slate-700 transition-colors">
-              <div className="w-14 h-14 rounded-2xl bg-[#D4FF3E]/10 border border-[#D4FF3E]/20 flex items-center justify-center mb-8 text-[#D4FF3E] shadow-[0_0_15px_rgba(212,255,62,0.1)]">
-                <Briefcase size={28} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Management</h3>
-              <p className="text-slate-400 leading-relaxed text-lg">
-                Long-term vision mapping and actionable growth strategies to ensure your business stays ahead of the curve.
-              </p>
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02 }} className="col-span-1 md:col-span-2 bg-slate-800 rounded-[2rem] p-10 border border-slate-700 hover:bg-slate-700 transition-colors">
-              <div className="w-14 h-14 rounded-2xl bg-[#D4FF3E]/10 border border-[#D4FF3E]/20 flex items-center justify-center mb-8 text-[#D4FF3E] shadow-[0_0_15px_rgba(212,255,62,0.1)]">
-                <TrendingUp size={28} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Change Management</h3>
-              <p className="text-slate-400 leading-relaxed text-lg">
-                Navigate organisational transitions smoothly with proven methodologies and stakeholder alignment.
-              </p>
-            </motion.div>
-
-            {/* Bottom Row: 3 Cards */}
-            <motion.div whileHover={{ scale: 1.02 }} className="col-span-1 md:col-span-2 bg-slate-800 rounded-[2rem] p-10 border border-slate-700 hover:bg-slate-700 transition-colors">
-              <div className="w-14 h-14 rounded-2xl bg-[#D4FF3E]/10 border border-[#D4FF3E]/20 flex items-center justify-center mb-8 text-[#D4FF3E] shadow-[0_0_15px_rgba(212,255,62,0.1)]">
-                <Zap size={28} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">AI Advisory</h3>
-              <p className="text-slate-400 leading-relaxed text-lg">
-                Leverage cutting-edge AI tools to automate tasks, gain insights, and future-proof your business operations.
-              </p>
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02 }} className="col-span-1 md:col-span-2 bg-slate-800 rounded-[2rem] p-10 border border-slate-700 hover:bg-slate-700 transition-colors">
-              <div className="w-14 h-14 rounded-2xl bg-[#D4FF3E]/10 border border-[#D4FF3E]/20 flex items-center justify-center mb-8 text-[#D4FF3E] shadow-[0_0_15px_rgba(212,255,62,0.1)]">
-                <Users size={28} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Human Resources</h3>
-              <p className="text-slate-400 leading-relaxed text-lg">
-                Optimise your workforce with tailored HR strategies, talent acquisition, and performance management.
-              </p>
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02 }} className="col-span-1 md:col-span-2 bg-slate-800 rounded-[2rem] p-10 border border-slate-700 hover:bg-slate-700 transition-colors">
-              <div className="w-14 h-14 rounded-2xl bg-[#D4FF3E]/10 border border-[#D4FF3E]/20 flex items-center justify-center mb-8 text-[#D4FF3E] shadow-[0_0_15px_rgba(212,255,62,0.1)]">
-                <Globe size={28} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Customised Solutions</h3>
-              <p className="text-slate-400 leading-relaxed text-lg">
-                Bespoke consulting and advisory services designed specifically for your unique business challenges.
-              </p>
-            </motion.div>
           </div>
         </div>
       </section>
@@ -813,7 +272,733 @@ export const Home = () => {
         </div>
       </section>
 
+      {/* Platform Overview Section */}
+      <section className="py-24 bg-slate-900 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="bg-slate-800 border border-slate-700 rounded-[3rem] p-12 md:p-16 lg:p-20 relative overflow-hidden flex flex-col lg:flex-row-reverse items-center justify-between min-h-[600px]">
+            
+            {/* Right Content (Text) */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              whileInView={{ opacity: 1, y: 0 }} 
+              viewport={{ once: true }} 
+              transition={{ duration: 0.6 }} 
+              className="relative z-20 lg:w-1/2 max-w-2xl lg:pl-12"
+            >
+              <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-[#D4FF3E]/10 text-[#D4FF3E] text-sm font-semibold mb-6 border border-[#D4FF3E]/20">
+                Coming Soon
+              </div>
+              <h2 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+                Inside the<br />Growth Platform
+              </h2>
+              <p className="text-xl text-slate-400 mb-8 leading-relaxed font-medium">
+                We are currently building a comprehensive digital workspace specifically for small businesses. Soon, you'll be able to access the tools, resources, and strategic support you need 24/7.
+              </p>
+              
+              <ul className="space-y-6 mb-10">
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Globe size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Web Application</h4>
+                    <p className="text-slate-400 leading-relaxed">An all-in-one platform aimed to provide you with 360-degree coverage of your business operations.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <FileText size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Business Resources</h4>
+                    <p className="text-slate-400 leading-relaxed">Providing comprehensive resources, templates, and tools to help you run your business efficiently.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Briefcase size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Tailored Services</h4>
+                    <p className="text-slate-400 leading-relaxed">Expert consulting and operational services specifically tailored to meet the unique needs of small businesses.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Headset size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">24/7 Partnership</h4>
+                    <p className="text-slate-400 leading-relaxed">A dedicated partnership providing you with everything needed to run your business successfully at any time.</p>
+                  </div>
+                </li>
+              </ul>
+            </motion.div>
+            
+            {/* Left Content - Visuals */}
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }} 
+              whileInView={{ opacity: 1, x: 0 }} 
+              viewport={{ once: true }} 
+              transition={{ duration: 0.8, delay: 0.2 }} 
+              className="relative z-10 lg:w-1/2 h-[400px] lg:h-full mt-16 lg:mt-0 hidden md:block"
+            >
+              {/* Dashboard UI Mockup */}
+              <div className="absolute left-0 lg:-left-12 top-1/2 -translate-y-1/2 w-[120%] h-[500px] bg-slate-900 rounded-r-[2rem] border-y-[8px] border-r-[8px] border-slate-800 shadow-2xl overflow-hidden z-10">
+                {/* Browser/App Chrome */}
+                <div className="w-full h-12 bg-slate-800 flex items-center px-4 gap-2 border-b border-slate-700">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                  </div>
+                  <div className="ml-4 w-1/3 h-6 bg-slate-900 rounded-md border border-slate-700"></div>
+                </div>
+                {/* App Content */}
+                <div className="flex h-full">
+                  {/* Sidebar */}
+                  <div className="w-48 h-full bg-slate-800/50 border-r border-slate-700 p-4 flex flex-col gap-4">
+                    <div className="w-full h-8 bg-[#D4FF3E]/20 rounded-md border border-[#D4FF3E]/30"></div>
+                    <div className="w-3/4 h-4 bg-slate-700 rounded mt-4"></div>
+                    <div className="w-full h-4 bg-slate-700 rounded"></div>
+                    <div className="w-5/6 h-4 bg-slate-700 rounded"></div>
+                    <div className="w-full h-4 bg-slate-700 rounded"></div>
+                  </div>
+                  {/* Main Content */}
+                  <div className="flex-1 p-6 flex flex-col gap-6">
+                    <div className="flex justify-between items-center">
+                      <div className="w-48 h-8 bg-slate-700 rounded-lg"></div>
+                      <div className="w-10 h-10 bg-slate-700 rounded-full"></div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="h-24 bg-slate-800 rounded-xl border border-slate-700 p-4">
+                        <div className="w-8 h-8 rounded-full bg-[#D4FF3E]/20 mb-3"></div>
+                        <div className="w-1/2 h-4 bg-slate-600 rounded"></div>
+                      </div>
+                      <div className="h-24 bg-slate-800 rounded-xl border border-slate-700 p-4">
+                        <div className="w-8 h-8 rounded-full bg-[#D4FF3E]/20 mb-3"></div>
+                        <div className="w-1/2 h-4 bg-slate-600 rounded"></div>
+                      </div>
+                      <div className="h-24 bg-slate-800 rounded-xl border border-slate-700 p-4">
+                        <div className="w-8 h-8 rounded-full bg-[#D4FF3E]/20 mb-3"></div>
+                        <div className="w-1/2 h-4 bg-slate-600 rounded"></div>
+                      </div>
+                    </div>
+                    <div className="flex-1 bg-slate-800 rounded-xl border border-slate-700 p-4">
+                      <div className="w-32 h-6 bg-slate-700 rounded mb-4"></div>
+                      <div className="w-full h-32 bg-slate-700/50 rounded-lg"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
 
+          </div>
+        </div>
+      </section>
+
+
+      {/* DocuShare */}
+      <section id="docushare" className="py-24 bg-slate-900 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="bg-slate-800 border border-slate-700 rounded-[3rem] p-12 md:p-16 lg:p-20 relative overflow-hidden flex flex-col lg:flex-row items-center justify-between min-h-[600px]">
+            
+            {/* Left Content (Text) */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              whileInView={{ opacity: 1, y: 0 }} 
+              viewport={{ once: true }} 
+              transition={{ duration: 0.6 }} 
+              className="relative z-20 lg:w-1/2 max-w-2xl lg:pr-12"
+            >
+              <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-[#D4FF3E]/10 text-[#D4FF3E] text-sm font-semibold mb-6 border border-[#D4FF3E]/20">
+                The Digital Hub
+              </div>
+              <h2 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+                Introducing<br />DocuShare
+              </h2>
+              <p className="text-xl text-slate-400 mb-8 leading-relaxed font-medium">
+                An on-demand document generation service. Get the documents you need, whenever you want. Over 500 templates, industry-specific Toolkits, and comprehensive Documentation Suites.
+              </p>
+              
+              <ul className="space-y-6 mb-10">
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <FileText size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">500+ Templates</h4>
+                    <p className="text-slate-400 leading-relaxed">A massive library of ready-to-use documents covering every aspect of business operations.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Briefcase size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Industry Toolkits</h4>
+                    <p className="text-slate-400 leading-relaxed">Tailored toolkits designed for specific industries or operational needs.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Shield size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Documentation Suites</h4>
+                    <p className="text-slate-400 leading-relaxed">Comprehensive suites to ensure you have all your bases covered securely.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Zap size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Customisation</h4>
+                    <p className="text-slate-400 leading-relaxed">Bespoke customisation services to tailor documents precisely to your clients' needs.</p>
+                  </div>
+                </li>
+              </ul>
+            </motion.div>
+            
+            {/* Right Content - Visuals */}
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }} 
+              whileInView={{ opacity: 1, x: 0 }} 
+              viewport={{ once: true }} 
+              transition={{ duration: 0.8, delay: 0.2 }} 
+              className="relative z-10 lg:w-1/2 h-[400px] lg:h-full mt-16 lg:mt-0 hidden md:block"
+            >
+              {/* DocuShare UI Mockup */}
+              <div className="absolute right-0 lg:-right-12 top-1/2 -translate-y-1/2 w-[120%] h-[500px] bg-slate-900 rounded-l-[2rem] border-y-[8px] border-l-[8px] border-slate-800 shadow-2xl overflow-hidden z-10">
+                {/* Browser/App Chrome */}
+                <div className="w-full h-12 bg-slate-800 flex items-center px-4 gap-2 border-b border-slate-700">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                  </div>
+                  <div className="ml-4 w-1/3 h-6 bg-slate-900 rounded-md border border-slate-700 flex items-center px-2">
+                    <div className="w-3 h-3 rounded-full border-2 border-slate-500"></div>
+                  </div>
+                </div>
+                {/* App Content */}
+                <div className="flex h-full">
+                  {/* Sidebar */}
+                  <div className="w-48 h-full bg-slate-800/50 border-r border-slate-700 p-4 flex flex-col gap-4">
+                    <div className="w-full h-8 bg-[#D4FF3E]/20 rounded-md border border-[#D4FF3E]/30"></div>
+                    <div className="w-3/4 h-4 bg-slate-700 rounded mt-4"></div>
+                    <div className="w-full h-4 bg-slate-700 rounded"></div>
+                    <div className="w-5/6 h-4 bg-slate-700 rounded"></div>
+                  </div>
+                  {/* Main Content - Document Grid */}
+                  <div className="flex-1 p-6 flex flex-col gap-6">
+                    <div className="flex justify-between items-center">
+                      <div className="w-48 h-8 bg-slate-700 rounded-lg"></div>
+                      <div className="w-24 h-8 bg-[#D4FF3E] rounded-lg"></div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4">
+                      {[1, 2, 3, 4, 5, 6].map((i) => (
+                        <div key={i} className="h-32 bg-slate-800 rounded-xl border border-slate-700 p-4 flex flex-col">
+                          <div className="w-10 h-10 rounded-lg bg-slate-700 mb-3 flex items-center justify-center">
+                            <div className="w-5 h-5 border-2 border-slate-500 rounded-sm"></div>
+                          </div>
+                          <div className="w-3/4 h-3 bg-slate-600 rounded mb-2"></div>
+                          <div className="w-1/2 h-2 bg-slate-500 rounded"></div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
+
+
+      {/* Partner Offers */}
+      <section id="offers" className="py-24 bg-slate-900 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="bg-slate-800 border border-slate-700 rounded-[3rem] p-12 md:p-16 lg:p-20 relative overflow-hidden flex flex-col lg:flex-row-reverse items-center justify-between min-h-[600px]">
+            
+            {/* Right Content (Text) */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              whileInView={{ opacity: 1, y: 0 }} 
+              viewport={{ once: true }} 
+              transition={{ duration: 0.6 }} 
+              className="relative z-20 lg:w-1/2 max-w-2xl lg:pl-12"
+            >
+              <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-[#D4FF3E]/10 text-[#D4FF3E] text-sm font-semibold mb-6 border border-[#D4FF3E]/20">
+                The Growth Arsenal
+              </div>
+              <h2 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+                Exclusive Partner<br />Offers
+              </h2>
+              <p className="text-xl text-slate-400 mb-8 leading-relaxed font-medium">
+                Access a range of different service providers aimed to provide discounts or special offers on anything from Insurance and Financing to everyday business needs.
+              </p>
+              
+              <ul className="space-y-6 mb-10">
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Gift size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Insurance & Financing</h4>
+                    <p className="text-slate-400 leading-relaxed">Discounts on essential business insurance and financing options.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Headset size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Everyday Business Needs</h4>
+                    <p className="text-slate-400 leading-relaxed">Special offers on software, office supplies, and everyday operational tools.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Calendar size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Professional Services</h4>
+                    <p className="text-slate-400 leading-relaxed">Reduced rates on legal, accounting, and specialized consulting services.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Network size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Marketing & Sales</h4>
+                    <p className="text-slate-400 leading-relaxed">Exclusive deals on marketing platforms, CRM tools, and lead generation services.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <FileText size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Technology & Hardware</h4>
+                    <p className="text-slate-400 leading-relaxed">Discounts on laptops, servers, and IT infrastructure setup.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Rocket size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Travel & Accommodations</h4>
+                    <p className="text-slate-400 leading-relaxed">Corporate rates for business travel, hotels, and co-working spaces globally.</p>
+                  </div>
+                </li>
+              </ul>
+              
+              <button onClick={() => setIsWaitlistModalOpen(true)} className="inline-flex items-center gap-2 bg-[#D4FF3E] text-slate-950 px-6 py-3 rounded-full font-bold hover:bg-[#bce62d] transition-colors">
+                Join Our Waitlist <ArrowRight size={20} />
+              </button>
+            </motion.div>
+            
+            {/* Left Content - Visuals */}
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }} 
+              whileInView={{ opacity: 1, x: 0 }} 
+              viewport={{ once: true }} 
+              transition={{ duration: 0.8, delay: 0.2 }} 
+              className="relative z-10 lg:w-1/2 h-[400px] lg:h-full mt-16 lg:mt-0 hidden md:block"
+            >
+              {/* Offers UI Mockup */}
+              <div className="absolute left-0 lg:-left-12 top-1/2 -translate-y-1/2 w-[120%] h-[500px] bg-slate-900 rounded-r-[2rem] border-y-[8px] border-r-[8px] border-slate-800 shadow-2xl overflow-hidden z-10">
+                {/* Browser/App Chrome */}
+                <div className="w-full h-12 bg-slate-800 flex items-center px-4 gap-2 border-b border-slate-700">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                  </div>
+                  <div className="ml-4 w-1/3 h-6 bg-slate-900 rounded-md border border-slate-700"></div>
+                </div>
+                {/* App Content */}
+                <div className="relative p-8 flex flex-col items-center justify-center h-[calc(100%-3rem)] bg-slate-900 overflow-hidden">
+                  {/* Background Glows */}
+                  <div className="absolute top-0 left-0 w-64 h-64 bg-[#D4FF3E]/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+                  <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+                  
+                  {/* Big Discount Card */}
+                  <div className="w-full max-w-md bg-slate-800 rounded-3xl border border-slate-700 shadow-2xl overflow-hidden relative z-10 flex flex-col">
+                    {/* Top Accent */}
+                    <div className="h-2 w-full bg-gradient-to-r from-[#D4FF3E] to-green-400"></div>
+                    
+                    <div className="p-8 flex flex-col items-center text-center">
+                      {/* Badge */}
+                      <div className="px-4 py-1.5 bg-[#D4FF3E]/10 border border-[#D4FF3E]/20 rounded-full mb-6 flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[#D4FF3E]"></div>
+                        <div className="w-24 h-2 bg-[#D4FF3E]/80 rounded-full"></div>
+                      </div>
+                      
+                      {/* Big Value */}
+                      <div className="flex items-center justify-center gap-3 mb-6">
+                        <div className="w-20 h-24 bg-slate-700 rounded-xl border border-slate-600 shadow-inner flex items-center justify-center">
+                          <div className="w-8 h-12 bg-slate-600 rounded-md"></div>
+                        </div>
+                        <div className="w-20 h-24 bg-slate-700 rounded-xl border border-slate-600 shadow-inner flex items-center justify-center">
+                          <div className="w-8 h-12 bg-slate-600 rounded-md"></div>
+                        </div>
+                        <div className="w-12 h-24 bg-slate-700/50 rounded-xl border border-slate-600/50 flex items-center justify-center">
+                          <div className="w-6 h-6 rounded-full bg-slate-600"></div>
+                        </div>
+                      </div>
+                      
+                      {/* Text lines */}
+                      <div className="w-3/4 h-4 bg-slate-300 rounded-full mb-3"></div>
+                      <div className="w-1/2 h-3 bg-slate-500 rounded-full mb-8"></div>
+                      
+                      {/* Coupon Box */}
+                      <div className="w-full border-2 border-dashed border-slate-600 rounded-xl p-4 flex justify-between items-center mb-6 bg-slate-900/50 relative">
+                        {/* Cutouts */}
+                        <div className="absolute -left-5 top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-800 rounded-full border-r-2 border-dashed border-slate-600"></div>
+                        <div className="absolute -right-5 top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-800 rounded-full border-l-2 border-dashed border-slate-600"></div>
+                        
+                        <div className="w-32 h-6 bg-slate-500 rounded"></div>
+                        <div className="w-10 h-10 bg-slate-700 rounded-lg flex items-center justify-center">
+                          <div className="w-5 h-5 border-2 border-slate-400 rounded-sm"></div>
+                        </div>
+                      </div>
+                      
+                      {/* CTA */}
+                      <div className="w-full h-14 bg-[#D4FF3E] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(212,255,62,0.2)]">
+                        <div className="w-32 h-4 bg-slate-900 rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Services */}
+      <section id="services" className="py-24 bg-slate-900 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="bg-slate-800 border border-slate-700 rounded-[3rem] p-12 md:p-16 lg:p-20 relative overflow-hidden flex flex-col lg:flex-row items-center justify-between min-h-[600px]">
+            
+            {/* Left Content (Text) */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              whileInView={{ opacity: 1, y: 0 }} 
+              viewport={{ once: true }} 
+              transition={{ duration: 0.6 }} 
+              className="relative z-20 lg:w-1/2 max-w-2xl lg:pr-12"
+            >
+              <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-[#D4FF3E]/10 text-[#D4FF3E] text-sm font-semibold mb-6 border border-[#D4FF3E]/20">
+                Core Services
+              </div>
+              <h2 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+                Our Core<br />Services
+              </h2>
+              <p className="text-xl text-slate-400 mb-8 leading-relaxed font-medium">
+                Standout consulting services designed to put you in control of your business. From strategic planning to seamless operations.
+              </p>
+              
+              <ul className="space-y-6 mb-10">
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Target size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Operations</h4>
+                    <p className="text-slate-400 leading-relaxed">Streamlining workflows and eliminating bottlenecks to maximise efficiency and reduce unnecessary overhead.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Briefcase size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Management</h4>
+                    <p className="text-slate-400 leading-relaxed">Long-term vision mapping and actionable growth strategies to ensure your business stays ahead of the curve.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <TrendingUp size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Change Management</h4>
+                    <p className="text-slate-400 leading-relaxed">Navigate organisational transitions smoothly with proven methodologies and stakeholder alignment.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Zap size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">AI Advisory</h4>
+                    <p className="text-slate-400 leading-relaxed">Leverage cutting-edge AI tools to automate tasks, gain insights, and future-proof your business operations.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Users size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Human Resources</h4>
+                    <p className="text-slate-400 leading-relaxed">Optimise your workforce with tailored HR strategies, talent acquisition, and performance management.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="mt-1 w-12 h-12 rounded-full bg-[#D4FF3E]/10 flex items-center justify-center flex-shrink-0 border border-[#D4FF3E]/20">
+                    <Globe size={20} className="text-[#D4FF3E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xl mb-1">Customised Solutions</h4>
+                    <p className="text-slate-400 leading-relaxed">Bespoke consulting and advisory services designed specifically for your unique business challenges.</p>
+                  </div>
+                </li>
+              </ul>
+              
+              <button onClick={() => setIsWaitlistModalOpen(true)} className="inline-flex items-center gap-2 bg-[#D4FF3E] text-slate-950 px-6 py-3 rounded-full font-bold hover:bg-[#bce62d] transition-colors">
+                Join Our Waitlist <ArrowRight size={20} />
+              </button>
+            </motion.div>
+            
+            {/* Right Content - Visuals */}
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }} 
+              whileInView={{ opacity: 1, x: 0 }} 
+              viewport={{ once: true }} 
+              transition={{ duration: 0.8, delay: 0.2 }} 
+              className="relative z-10 lg:w-1/2 h-[400px] lg:h-full mt-16 lg:mt-0 hidden md:block"
+            >
+              {/* Services UI Mockup */}
+              <div className="absolute right-0 lg:-right-12 top-1/2 -translate-y-1/2 w-[120%] h-[500px] bg-slate-900 rounded-l-[2rem] border-y-[8px] border-l-[8px] border-slate-800 shadow-2xl overflow-hidden z-10">
+                {/* Browser/App Chrome */}
+                <div className="w-full h-12 bg-slate-800 flex items-center px-4 gap-2 border-b border-slate-700">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                  </div>
+                  <div className="ml-4 w-1/3 h-6 bg-slate-900 rounded-md border border-slate-700 flex items-center px-3">
+                    <div className="w-3 h-3 rounded-full border-2 border-slate-500"></div>
+                  </div>
+                </div>
+                {/* App Content */}
+                <div className="flex h-full bg-slate-900">
+                  {/* Sidebar */}
+                  <div className="w-16 h-full bg-slate-800/80 border-r border-slate-700 p-4 flex flex-col items-center gap-6">
+                    <div className="w-8 h-8 rounded-lg bg-[#D4FF3E] flex items-center justify-center">
+                      <div className="w-4 h-4 bg-slate-900 rounded-sm"></div>
+                    </div>
+                    <div className="w-6 h-6 rounded-md bg-slate-700"></div>
+                    <div className="w-6 h-6 rounded-md bg-slate-700"></div>
+                    <div className="w-6 h-6 rounded-md bg-slate-700"></div>
+                  </div>
+                  {/* Main Content - Kanban Board */}
+                  <div className="flex-1 p-6 flex flex-col gap-6 overflow-hidden">
+                    {/* Header */}
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <div className="w-48 h-6 bg-slate-700 rounded mb-2"></div>
+                        <div className="w-32 h-3 bg-slate-500 rounded"></div>
+                      </div>
+                      <div className="flex gap-2">
+                        <div className="w-8 h-8 bg-slate-700 rounded-full border-2 border-slate-800"></div>
+                        <div className="w-8 h-8 bg-slate-700 rounded-full border-2 border-slate-800 -ml-4"></div>
+                        <div className="w-8 h-8 bg-[#D4FF3E]/20 text-[#D4FF3E] rounded-full border-2 border-slate-800 -ml-4 flex items-center justify-center text-xs">+3</div>
+                      </div>
+                    </div>
+                    {/* Board Columns */}
+                    <div className="flex gap-4 h-full">
+                      {/* Column 1: Strategy */}
+                      <div className="flex-1 bg-slate-800/50 rounded-xl border border-slate-700 p-3 flex flex-col gap-3">
+                        <div className="flex justify-between items-center mb-1">
+                          <div className="w-24 h-4 bg-slate-600 rounded"></div>
+                          <div className="w-6 h-4 bg-slate-700 rounded"></div>
+                        </div>
+                        {/* Card 1 */}
+                        <div className="bg-slate-800 rounded-lg p-3 border border-slate-600 shadow-sm">
+                          <div className="w-16 h-2 bg-[#D4FF3E] rounded-full mb-3"></div>
+                          <div className="w-full h-3 bg-slate-400 rounded mb-2"></div>
+                          <div className="w-3/4 h-3 bg-slate-400 rounded mb-4"></div>
+                          <div className="flex justify-between items-center">
+                            <div className="w-6 h-6 bg-slate-700 rounded-full"></div>
+                            <div className="w-12 h-2 bg-slate-600 rounded"></div>
+                          </div>
+                        </div>
+                        {/* Card 2 */}
+                        <div className="bg-slate-800 rounded-lg p-3 border border-slate-600 shadow-sm">
+                          <div className="w-16 h-2 bg-purple-400 rounded-full mb-3"></div>
+                          <div className="w-5/6 h-3 bg-slate-400 rounded mb-2"></div>
+                          <div className="w-1/2 h-3 bg-slate-400 rounded mb-4"></div>
+                          <div className="flex justify-between items-center">
+                            <div className="w-6 h-6 bg-slate-700 rounded-full"></div>
+                            <div className="w-12 h-2 bg-slate-600 rounded"></div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Column 2: Operations */}
+                      <div className="flex-1 bg-slate-800/50 rounded-xl border border-slate-700 p-3 flex flex-col gap-3">
+                        <div className="flex justify-between items-center mb-1">
+                          <div className="w-24 h-4 bg-slate-600 rounded"></div>
+                          <div className="w-6 h-4 bg-slate-700 rounded"></div>
+                        </div>
+                        {/* Card 3 */}
+                        <div className="bg-slate-800 rounded-lg p-3 border border-slate-600 shadow-sm">
+                          <div className="w-16 h-2 bg-blue-400 rounded-full mb-3"></div>
+                          <div className="w-full h-3 bg-slate-400 rounded mb-2"></div>
+                          <div className="w-2/3 h-3 bg-slate-400 rounded mb-4"></div>
+                          <div className="flex justify-between items-center">
+                            <div className="flex -space-x-2">
+                              <div className="w-6 h-6 bg-slate-700 rounded-full border border-slate-800"></div>
+                              <div className="w-6 h-6 bg-slate-600 rounded-full border border-slate-800"></div>
+                            </div>
+                            <div className="w-12 h-2 bg-slate-600 rounded"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Column 3: Review */}
+                      <div className="flex-1 bg-slate-800/50 rounded-xl border border-slate-700 p-3 flex flex-col gap-3">
+                        <div className="flex justify-between items-center mb-1">
+                          <div className="w-24 h-4 bg-slate-600 rounded"></div>
+                          <div className="w-6 h-4 bg-slate-700 rounded"></div>
+                        </div>
+                        {/* Card 4 */}
+                        <div className="bg-slate-800 rounded-lg p-3 border border-slate-600 shadow-sm opacity-60">
+                          <div className="w-16 h-2 bg-green-400 rounded-full mb-3"></div>
+                          <div className="w-4/5 h-3 bg-slate-400 rounded mb-2"></div>
+                          <div className="w-1/2 h-3 bg-slate-400 rounded mb-4"></div>
+                          <div className="flex justify-between items-center">
+                            <div className="w-6 h-6 bg-slate-700 rounded-full"></div>
+                            <div className="w-12 h-2 bg-slate-600 rounded"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
+
+
+
+
+      {/* Who We Are Section */}
+      <section id="who-we-are" className="py-24 bg-slate-900 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="bg-slate-800 border border-slate-700 rounded-[3rem] p-12 md:p-16 lg:p-20 relative overflow-hidden flex flex-col lg:flex-row-reverse items-center justify-between min-h-[600px]">
+            
+            {/* Right Content (Text) */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              whileInView={{ opacity: 1, y: 0 }} 
+              viewport={{ once: true }} 
+              transition={{ duration: 0.6 }} 
+              className="relative z-20 lg:w-1/2 max-w-2xl lg:pl-12"
+            >
+              <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-[#D4FF3E]/10 text-[#D4FF3E] text-sm font-semibold mb-6 border border-[#D4FF3E]/20">
+                About Us
+              </div>
+              <h2 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+                Who We<br />Are
+              </h2>
+              <p className="text-xl text-slate-400 mb-8 leading-relaxed font-medium">
+                As your dedicated Remote Business Partner, we are revolutionising business advisory and consulting for small to medium enterprises. By combining expert strategic guidance with cost-effective, process-driven operational frameworks, we empower you to scale efficiently. Say goodbye to the bloat of traditional consulting and hello to actionable insights, streamlined workflows, and real, measurable growth.
+              </p>
+              
+              <button onClick={() => setIsWaitlistModalOpen(true)} className="inline-flex items-center gap-2 bg-[#D4FF3E] text-slate-950 px-6 py-3 rounded-full font-bold hover:bg-[#bce62d] transition-colors">
+                Join Our Waitlist <ArrowRight size={20} />
+              </button>
+            </motion.div>
+            
+            {/* Left Content - Visuals */}
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }} 
+              whileInView={{ opacity: 1, x: 0 }} 
+              viewport={{ once: true }} 
+              transition={{ duration: 0.8, delay: 0.2 }} 
+              className="relative z-10 lg:w-1/2 h-[400px] lg:h-full mt-16 lg:mt-0 hidden md:block"
+            >
+              {/* Team UI Mockup */}
+              <div className="absolute left-0 lg:-left-12 top-1/2 -translate-y-1/2 w-[120%] h-[500px] bg-slate-900 rounded-r-[2rem] border-y-[8px] border-r-[8px] border-slate-800 shadow-2xl overflow-hidden z-10">
+                {/* Browser/App Chrome */}
+                <div className="w-full h-12 bg-slate-800 flex items-center px-4 gap-2 border-b border-slate-700">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div className="w-3 h-3 rounded-full bg-slate-600"></div>
+                  </div>
+                  <div className="ml-4 w-1/3 h-6 bg-slate-900 rounded-md border border-slate-700"></div>
+                </div>
+                {/* App Content */}
+                <div className="flex h-full">
+                  {/* Sidebar - Contacts */}
+                  <div className="w-56 h-full bg-slate-800/50 border-r border-slate-700 p-4 flex flex-col gap-4">
+                    <div className="w-full h-8 bg-slate-700 rounded-md mb-2"></div>
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-slate-700 relative">
+                          <div className="absolute bottom-0 right-0 w-3 h-3 bg-[#D4FF3E] rounded-full border-2 border-slate-800"></div>
+                        </div>
+                        <div className="flex-1">
+                          <div className="w-24 h-3 bg-slate-500 rounded mb-1.5"></div>
+                          <div className="w-16 h-2 bg-slate-600 rounded"></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Main Content - Chat/Collab */}
+                  <div className="flex-1 flex flex-col">
+                    <div className="h-16 border-b border-slate-700 flex items-center px-6 gap-4">
+                      <div className="w-10 h-10 rounded-full bg-slate-700"></div>
+                      <div>
+                        <div className="w-32 h-4 bg-slate-500 rounded mb-1.5"></div>
+                        <div className="w-20 h-2 bg-[#D4FF3E]/70 rounded"></div>
+                      </div>
+                    </div>
+                    <div className="flex-1 p-6 flex flex-col gap-4">
+                      <div className="self-start max-w-[80%] bg-slate-800 p-4 rounded-2xl rounded-tl-sm border border-slate-700">
+                        <div className="w-48 h-3 bg-slate-400 rounded mb-2"></div>
+                        <div className="w-32 h-3 bg-slate-400 rounded"></div>
+                      </div>
+                      <div className="self-end max-w-[80%] bg-[#D4FF3E]/10 p-4 rounded-2xl rounded-tr-sm border border-[#D4FF3E]/20">
+                        <div className="w-56 h-3 bg-[#D4FF3E]/80 rounded mb-2"></div>
+                        <div className="w-40 h-3 bg-[#D4FF3E]/80 rounded"></div>
+                      </div>
+                      <div className="self-start max-w-[80%] bg-slate-800 p-4 rounded-2xl rounded-tl-sm border border-slate-700">
+                        <div className="w-64 h-3 bg-slate-400 rounded mb-2"></div>
+                        <div className="w-48 h-3 bg-slate-400 rounded"></div>
+                      </div>
+                    </div>
+                    <div className="h-16 border-t border-slate-700 p-3">
+                      <div className="w-full h-full bg-slate-800 rounded-lg border border-slate-600 flex items-center px-4">
+                        <div className="w-4 h-4 bg-slate-500 rounded-sm"></div>
+                        <div className="w-32 h-3 bg-slate-600 rounded ml-3"></div>
+                        <div className="w-16 h-6 bg-[#D4FF3E] rounded-md ml-auto"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
 
       {/* Contact Us */}
       <section id="contact" className="py-24 bg-slate-900 text-white relative overflow-hidden">

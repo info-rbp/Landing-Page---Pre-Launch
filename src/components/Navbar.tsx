@@ -18,14 +18,6 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: 'Application', href: '#application' },
-    { name: 'DocuShare', href: '#docushare' },
-    { name: 'Offers', href: '#offers' },
-    { name: 'Services', href: '#services' },
-    { name: 'Vision', href: '#creating' },
-  ];
-
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const element = document.querySelector(href);
@@ -53,19 +45,9 @@ export const Navbar = () => {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <a 
-              key={link.name} 
-              href={link.href}
-              onClick={(e) => scrollToSection(e, link.href)}
-              className="text-sm font-medium text-slate-300 hover:text-white transition-colors"
-            >
-              {link.name}
-            </a>
-          ))}
-          <a href="#contact" onClick={(e) => scrollToSection(e, '#contact')} className="bg-[#D4FF3E] text-black px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-[#bce62d] transition-all active:scale-95">
-            Contact Us
-          </a>
+          <button onClick={(e) => { e.preventDefault(); window.dispatchEvent(new CustomEvent('openWaitlistModal')); }} className="bg-[#D4FF3E] text-black px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-[#bce62d] transition-all active:scale-95">
+            Join Our Waitlist
+          </button>
         </div>
 
         {/* Mobile Toggle */}
@@ -86,23 +68,12 @@ export const Navbar = () => {
             exit={{ opacity: 0, y: -20 }}
             className="absolute top-full left-0 right-0 bg-slate-900 border-t border-slate-800 p-6 flex flex-col gap-4 md:hidden shadow-xl"
           >
-            {navLinks.map((link) => (
-              <a 
-                key={link.name} 
-                href={link.href}
-                onClick={(e) => scrollToSection(e, link.href)}
-                className="text-lg font-medium text-slate-300 hover:text-white"
-              >
-                {link.name}
-              </a>
-            ))}
-            <a 
-              href="#contact" 
-              onClick={(e) => scrollToSection(e, '#contact')}
+            <button 
+              onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); window.dispatchEvent(new CustomEvent('openWaitlistModal')); }}
               className="bg-[#D4FF3E] text-black w-full py-3 rounded-xl font-semibold text-center hover:bg-[#bce62d] transition-all"
             >
-              Contact Us
-            </a>
+              Join Our Waitlist
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

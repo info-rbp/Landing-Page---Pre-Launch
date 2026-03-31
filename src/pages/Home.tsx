@@ -109,27 +109,6 @@ export const Home = () => {
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
-                
-                {/* Floating Stats */}
-                <div className="absolute bottom-6 left-6 md:bottom-10 md:left-10 bg-slate-800/90 backdrop-blur-md border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl flex items-center gap-4">
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#D4FF3E]/20 flex items-center justify-center flex-shrink-0">
-                    <Users size={20} className="text-[#D4FF3E] md:w-6 md:h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl md:text-2xl font-bold text-white">200+</h3>
-                    <p className="text-slate-400 text-xs md:text-sm font-medium">Esteemed Clients</p>
-                  </div>
-                </div>
-
-                <div className="absolute top-6 right-6 md:top-10 md:right-10 bg-slate-800/90 backdrop-blur-md border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl flex items-center gap-4">
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#D4FF3E]/20 flex items-center justify-center flex-shrink-0">
-                    <Globe size={20} className="text-[#D4FF3E] md:w-6 md:h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl md:text-2xl font-bold text-white">20+</h3>
-                    <p className="text-slate-400 text-xs md:text-sm font-medium">Industry Partners</p>
-                  </div>
-                </div>
               </div>
             </motion.div>
 

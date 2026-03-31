@@ -196,7 +196,7 @@ export const Home = () => {
             </div>
             <div className="w-full lg:w-2/3">
               <p className="text-xl md:text-2xl text-slate-400 leading-relaxed font-medium">
-                As your dedicated Remote Business Partner, we are revolutionizing business advisory and consulting for small to medium enterprises. By combining expert strategic guidance with cost-effective, process-driven operational frameworks, we empower you to scale efficiently. Say goodbye to the bloat of traditional consulting and hello to actionable insights, streamlined workflows, and real, measurable growth.
+                As your dedicated Remote Business Partner, we are revolutionising business advisory and consulting for small to medium enterprises. By combining expert strategic guidance with cost-effective, process-driven operational frameworks, we empower you to scale efficiently. Say goodbye to the bloat of traditional consulting and hello to actionable insights, streamlined workflows, and real, measurable growth.
               </p>
             </div>
           </div>
@@ -296,7 +296,7 @@ export const Home = () => {
                 AI Advisory<br />Tools
               </h3>
               <p className="text-slate-400 mt-12 leading-relaxed text-sm md:text-base">
-                Leverage cutting-edge AI integrations to analyze data, generate reports, and future-proof your business operations.
+                Leverage cutting-edge AI integrations to analyse data, generate reports, and future-proof your business operations.
               </p>
             </motion.div>
 
@@ -400,7 +400,7 @@ export const Home = () => {
               The Web<br />Application
             </h2>
             <p className="text-lg text-slate-400 max-w-md leading-relaxed">
-              A powerful, centralized hub for your business. Manage tasks, access resources, and collaborate with your Remote Business Partner seamlessly from any device.
+              A powerful, centralised hub for your business. Manage tasks, access resources, and collaborate with your Remote Business Partner seamlessly from any device.
             </p>
           </div>
           
@@ -620,7 +620,7 @@ export const Home = () => {
               </div>
               <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Operations</h3>
               <p className="text-slate-400 leading-relaxed text-lg">
-                Streamlining workflows and eliminating bottlenecks to maximize efficiency and reduce unnecessary overhead.
+                Streamlining workflows and eliminating bottlenecks to maximise efficiency and reduce unnecessary overhead.
               </p>
             </motion.div>
 
@@ -640,7 +640,7 @@ export const Home = () => {
               </div>
               <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Change Management</h3>
               <p className="text-slate-400 leading-relaxed text-lg">
-                Navigate organizational transitions smoothly with proven methodologies and stakeholder alignment.
+                Navigate organisational transitions smoothly with proven methodologies and stakeholder alignment.
               </p>
             </motion.div>
 
@@ -661,7 +661,7 @@ export const Home = () => {
               </div>
               <h3 className="text-2xl font-bold text-white mb-4 tracking-tight">Human Resources</h3>
               <p className="text-slate-400 leading-relaxed text-lg">
-                Optimize your workforce with tailored HR strategies, talent acquisition, and performance management.
+                Optimise your workforce with tailored HR strategies, talent acquisition, and performance management.
               </p>
             </motion.div>
 

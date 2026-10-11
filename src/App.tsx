@@ -213,7 +213,7 @@ function PillarIcon({ index }: { index: number }) {
   return <span className="pillar-icon"><Icon size={28} strokeWidth={1.5} /></span>;
 }
 
-function ServiceCard({ service, index = 0, featured = false }: { service: Service; index?: number; featured?: boolean }) {
+function ServiceCard({ service, index = 0, featured = false }: { service: Service; index?: number; featured?: boolean; key?: string }) {
   const serviceIndex = services.findIndex((item) => item.slug === service.slug);
   const Icon = serviceIcons[serviceIndex] || BriefcaseBusiness;
   return (

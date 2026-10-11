@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Link, NavLink, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import {
   ArrowRight, ArrowUpRight, ArrowDown, BarChart3, BriefcaseBusiness,
   Building2, Check, CheckCircle2, ChevronDown, ChevronRight,
@@ -12,6 +11,82 @@ import {
   services, siteUrl
 } from './data/site';
 import type { Service } from './data/site';
+
+// Minimal client-side navigation for this static corporate website.
+// Internal links use the History API; no server-side router or data runtime is required.
+type InternalLocation = { pathname: string; hash: string };
+type NavigationState = { location: InternalLocation; navigate: (to: string, replace?: boolean) => void };
+const NavigationContext = React.createContext<NavigationState | undefined>(undefined);
+
+function currentLocation(): InternalLocation {
+  return { pathname: window.location.pathname, hash: window.location.hash };
+}
+
+function BrowserRouter({ children }: { children: React.ReactNode }) {
+  const [location, setLocation] = useState<InternalLocation>(currentLocation);
+  useEffect(() => {
+    const onPopState = () => setLocation(currentLocation());
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+  function navigate(to: string, replace = false) {
+    const target = new URL(to, window.location.href);
+    if (target.origin !== window.location.origin) {
+      window.location.href = target.href;
+      return;
+    }
+    const next = target.pathname + target.search + target.hash;
+    if (replace) window.history.replaceState({}, '', next);
+    else window.history.pushState({}, '', next);
+    setLocation(currentLocation());
+  }
+  return <NavigationContext.Provider value={{ location, navigate }}>{children}</NavigationContext.Provider>;
+}
+
+function useNavigation() {
+  const context = React.useContext(NavigationContext);
+  if (!context) throw new Error('Navigation requires BrowserRouter');
+  return context;
+}
+
+function useLocation() {
+  return useNavigation().location;
+}
+
+function useParams() {
+  const { pathname } = useLocation();
+  return { slug: pathname.startsWith('/services/') ? decodeURIComponent(pathname.split('/')[2] || '') : undefined };
+}
+
+type InternalLinkProps = {
+  to: string;
+  children: React.ReactNode;
+  className?: string;
+  key?: string;
+  'aria-label'?: string;
+};
+
+function Link({ to, children, className, ...extra }: InternalLinkProps) {
+  const { navigate } = useNavigation();
+  function onClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    navigate(to);
+  }
+  return <a href={to} className={className} aria-label={extra['aria-label']} onClick={onClick}>{children}</a>;
+}
+
+function NavLink({ to, children, className }: {
+  to: string;
+  children: React.ReactNode;
+  className: string | ((args: { isActive: boolean }) => string);
+  key?: string;
+}) {
+  const { pathname } = useLocation();
+  const isActive = pathname === to;
+  const resolved = typeof className === 'function' ? className({ isActive }) : className;
+  return <Link to={to} className={resolved}>{children}</Link>;
+}
 
 const serviceIcons: LucideIcon[] = [
   BarChart3, FileSearch, BriefcaseBusiness, Settings2, TrendingUp,
@@ -452,7 +527,7 @@ function ServicesPage() {
 function ServicePage() {
   const { slug } = useParams();
   const service = services.find((item) => item.slug === slug);
-  if (!service) return <Navigate to="/services" replace />;
+  if (!service) return <NotFoundPage />;
   const related = services.filter((s) => s.slug !== service.slug && (s.category === service.category || s.slug === 'commercial-advisory' || s.slug === 'business-management')).slice(0, 3);
   return (
     <>
@@ -664,28 +739,29 @@ function NotFoundPage() {
   );
 }
 
+function RenderPage() {
+  const { pathname } = useLocation();
+  if (pathname === '/') return <HomePage />;
+  if (pathname === '/services') return <ServicesPage />;
+  if (pathname.startsWith('/services/')) return <ServicePage />;
+  if (pathname === '/who-we-help') return <WhoWeHelpPage />;
+  if (pathname === '/our-work') return <OurWorkPage />;
+  if (pathname === '/how-we-work') return <HowWeWorkPage />;
+  if (pathname === '/about') return <AboutPage />;
+  if (pathname === '/contact') return <ContactPage />;
+  if (pathname === '/privacy') return <LegalPage slug="privacy" />;
+  if (pathname === '/terms') return <LegalPage slug="terms" />;
+  if (pathname === '/disclaimer') return <LegalPage slug="disclaimer" />;
+  return <NotFoundPage />;
+}
+
 function SiteShell() {
   return (
     <>
       <ScrollToTop />
       <a href="#main-content" className="skip-link">Skip to content</a>
       <Header />
-      <main id="main-content">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/services/:slug" element={<ServicePage />} />
-          <Route path="/who-we-help" element={<WhoWeHelpPage />} />
-          <Route path="/our-work" element={<OurWorkPage />} />
-          <Route path="/how-we-work" element={<HowWeWorkPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/privacy" element={<LegalPage slug="privacy" />} />
-          <Route path="/terms" element={<LegalPage slug="terms" />} />
-          <Route path="/disclaimer" element={<LegalPage slug="disclaimer" />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </main>
+      <main id="main-content"><RenderPage /></main>
       <Footer />
     </>
   );

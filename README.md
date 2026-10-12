@@ -38,17 +38,21 @@ Requirements: Node.js 20 or newer and npm.
 4. Run npm run build for the production site.
 5. The deployable static output is in dist/.
 
-## Static deployment
+## Cloudflare Workers deployment
 
-Cloudflare Pages configuration:
-- Framework preset: Vite
-- Build command: npm run build
-- Output directory: dist
-- Production branch: main, after review and merge
+This repository is linked to Cloudflare **Workers Builds** as the existing `landing-page` Worker (not a Cloudflare Pages project). Keep the Worker name unchanged to retain its existing deployment target.
 
-The public/_redirects file provides SPA route fallback on compatible static hosts, so direct visits to /services/... and other nested routes load correctly. Public sitemap.xml and robots.txt support discovery. Update the canonical domain in index.html, src/data/site.ts, and public files if hosting under another domain.
+- Node.js: 22 or 24
+- Repository branch: `main`
+- Root directory: `/`
+- Build command: `npm run build`
+- Deploy command: `npm run deploy`
+- Output directory: `dist`
+- Static assets and SPA fallback: `wrangler.jsonc`
 
-If deploying to a host that does not support _redirects, configure its equivalent HTML5-history fallback.
+`npm run deploy` uses the explicitly pinned Wrangler CLI and reads `wrangler.jsonc`, preventing the first-run interactive Vite project setup in CI. `npm run check:deploy` checks the deployment configuration in dry-run mode without publishing. A 502/503/504 returned by Cloudflare's API is an upstream transient service error, not a Vite compilation failure; retry the Workers Build if that occurs.
+
+`public/_redirects` and `public/_headers` are retained for compatibility with Cloudflare Pages or similar hosts, but the active Worker uses `wrangler.jsonc` for SPA fallback. Public `sitemap.xml` and `robots.txt` support search discovery. Update the canonical domain in `index.html`, `src/data/site.ts`, and public files if the domain changes.
 
 ## Contact form
 

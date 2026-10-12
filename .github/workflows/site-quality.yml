@@ -23,6 +23,8 @@ jobs:
         run: npm run build
       - name: Validate Cloudflare Worker deploy configuration (no publish)
         run: npm run check:deploy
+      - name: Check Workers Static Assets routing configuration
+        run: test ! -e public/_redirects
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high
       - name: Package site for visual QA

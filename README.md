@@ -52,7 +52,7 @@ This repository is linked to Cloudflare **Workers Builds** as the existing `land
 
 `npm run deploy` uses the explicitly pinned Wrangler CLI and reads `wrangler.jsonc`, preventing the first-run interactive Vite project setup in CI. `npm run check:deploy` checks the deployment configuration in dry-run mode without publishing. A 502/503/504 returned by Cloudflare's API is an upstream transient service error, not a Vite compilation failure; retry the Workers Build if that occurs.
 
-`public/_redirects` and `public/_headers` are retained for compatibility with Cloudflare Pages or similar hosts, but the active Worker uses `wrangler.jsonc` for SPA fallback. Public `sitemap.xml` and `robots.txt` support search discovery. Update the canonical domain in `index.html`, `src/data/site.ts`, and public files if the domain changes.
+Workers Static Assets uses the `assets.not_found_handling` setting in `wrangler.jsonc` to provide SPA fallback. Do **not** add a Pages-style `public/_redirects` catch-all (`/* /index.html 200`): Workers rejects it as an infinite redirect loop (Cloudflare error 100324). The `public/_headers` file remains available for supported static response headers. Public `sitemap.xml` and `robots.txt` support search discovery. Update the canonical domain in `index.html`, `src/data/site.ts`, and public files if the domain changes.
 
 ## Contact form
 

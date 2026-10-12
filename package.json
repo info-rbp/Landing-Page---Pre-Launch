@@ -7,7 +7,9 @@
     "dev": "vite --port=3000 --host=0.0.0.0",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "deploy": "npx --yes wrangler@4.149.0 deploy --config wrangler.jsonc",
+    "check:deploy": "npx --yes wrangler@4.149.0 deploy --dry-run --config wrangler.jsonc"
   },
   "dependencies": {
     "lucide-react": "^0.546.0",
